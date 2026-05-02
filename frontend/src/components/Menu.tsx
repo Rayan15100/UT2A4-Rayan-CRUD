@@ -4,6 +4,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../store';
@@ -46,7 +48,8 @@ export default function Menu() {
             Bienvenido, <b>{userData.userName}</b>
           </Typography>
           
-          <AccountCircleIcon />
+          {/* Renderizado condicional: iconos diferentes según el rol */}
+          {userData.userRol === 'admin' ? <AdminPanelSettingsIcon /> : <AccountCircleIcon />}
         </Toolbar>
       </AppBar>
 
@@ -63,6 +66,18 @@ export default function Menu() {
                 </ListItemButton>
               </ListItem>
             </Link>
+
+            {/* Renderizado condicional: sólo el admin ve el menú de Informes */}
+            {userData.userRol === 'admin' && (
+              <Link to="/reports" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon><AssessmentIcon /></ListItemIcon>
+                    <ListItemText primary="Informes" />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            )}
 
             <ListItem disablePadding>
               <ListItemButton onClick={handleLogout}>

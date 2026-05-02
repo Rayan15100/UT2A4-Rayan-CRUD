@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Paper, Alert, TableContainer } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../store';
 
 // Creamos el tipo itemtype. Este tipo será un objeto con un id opcional de tipo number, nombre, marca y tipo de tipo string y el precio de tipo number
 interface itemtype {
@@ -19,6 +21,9 @@ export default function Dashboard() {
   const [item, setItem] = useState<itemtype>(itemInitialState);
   const [tableData, setTableData] = useState<itemtype[]>([]);
   const [mensaje, setMensaje] = useState('');
+  
+  // Pillamos los datos del usuario logueado desde el store de Redux
+  const userData = useSelector((state: RootState) => state.authenticator);
 
   // Función para pedir los datos a la base de datos
   const fetchItems = async () => {
@@ -43,6 +48,7 @@ export default function Dashboard() {
       const url = `http://localhost:3030/addItem?nombre=${item.nombre}&marca=${item.marca}&tipo=${item.tipo}&precio=${item.precio}`;
       await fetch(url);
       setMensaje('Datos guardados con éxito');
+      setItem(itemInitialState); // Limpiar datos de los TextField
       fetchItems(); // Recargamos la tabla para que salga el nuevo dato al momento
       setTimeout(() => setMensaje(''), 3000); // Quitamos el aviso a los 3 segundos
     } catch (error) {
@@ -71,7 +77,7 @@ export default function Dashboard() {
           <TextField label="Nombre *" value={item.nombre} onChange={(e) => setItem({ ...item, nombre: e.target.value })} fullWidth />
           <TextField label="Marca *" value={item.marca} onChange={(e) => setItem({ ...item, marca: e.target.value })} fullWidth />
           <TextField label="Tipo *" value={item.tipo} onChange={(e) => setItem({ ...item, tipo: e.target.value })} fullWidth />
-          <TextField label="Precio *" type="number" value={item.precio} onChange={(e) => setItem({ ...item, precio: Number(e.target.value) })} fullWidth />
+          <TextField label="Precio *" type="number" value={item.precio || ''} onChange={(e) => setItem({ ...item, precio: Number(e.target.value) })} fullWidth />
         </Box>
         <Box display="flex" justifyContent="center">
           <Button variant="contained" onClick={handleInsertar} sx={{ bgcolor: '#1d3557' }}>
@@ -97,9 +103,12 @@ export default function Dashboard() {
             {tableData.map((row: itemtype) => (
               <TableRow key={row.id}>
                 <TableCell>
-                  <Button onClick={() => handleDeleteItem(row)} color="error">
-                    <DeleteForeverIcon />
-                  </Button>
+                  {/* Renderizado condicional: el usuario con rol user no va a poder eliminar registros */}
+                  {userData.userRol === 'admin' && (
+                    <Button onClick={() => handleDeleteItem(row)} color="error">
+                      <DeleteForeverIcon />
+                    </Button>
+                  )}
                 </TableCell>
                 <TableCell>{row.nombre}</TableCell>
                 <TableCell>{row.marca}</TableCell>

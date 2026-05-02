@@ -6,13 +6,11 @@ import store from './store.ts'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 
-// Punto de entrada principal. Envolvemos toda la aplicación con Redux (Provider) y las rutas (BrowserRouter)
+// Se elimina el StrictMode para evitar conflictos con findDOMNode en material-table
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
 )
