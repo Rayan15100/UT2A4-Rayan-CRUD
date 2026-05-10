@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Menu from '../components/Menu';
 import InformeColeccion from '../components/InformeColeccion';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Tooltip } from '@mui/material';
 
 export default function Reports() {
   // Variable de control para renderizar el componente
@@ -25,9 +25,11 @@ export default function Reports() {
     <>
       <Menu />
       <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Button variant="contained" color="secondary" onClick={handleReport} sx={{ mb: 3 }}>
-          INFORME COLECCION
-        </Button>
+        <Tooltip title="Cargar tabla interactiva de datos" placement="bottom" arrow>
+          <Button variant="contained" color="secondary" onClick={handleReport} sx={{ mb: 3 }}>
+            INFORME COLECCION
+          </Button>
+        </Tooltip>
         {/* Renderizamos pasando la prop data */}
         {showReport && <InformeColeccion data={reportData} />}
       </Box>

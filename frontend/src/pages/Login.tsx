@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../store';
@@ -38,7 +38,11 @@ export default function Login() {
         <Typography variant="h5" textAlign="center">Iniciar Sesión</Typography>
         <TextField label="Usuario" variant="outlined" value={user} onChange={(e) => setUser(e.target.value)} />
         <TextField label="Contraseña" type="password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <Button variant="contained" color="primary" onClick={handleLogin}>Acceder</Button>
+        
+        {/* Tooltip en forma de flecha indicando posición */}
+        <Tooltip title="Haz clic para iniciar sesión" placement="bottom" arrow>
+          <Button variant="contained" color="primary" onClick={handleLogin}>Acceder</Button>
+        </Tooltip>
       </Paper>
     </Box>
   );

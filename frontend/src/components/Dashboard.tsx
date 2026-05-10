@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Paper, Alert, TableContainer } from '@mui/material';
+import { Box, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Paper, Alert, TableContainer, Tooltip } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
@@ -80,9 +80,11 @@ export default function Dashboard() {
           <TextField label="Precio *" type="number" value={item.precio || ''} onChange={(e) => setItem({ ...item, precio: Number(e.target.value) })} fullWidth />
         </Box>
         <Box display="flex" justifyContent="center">
-          <Button variant="contained" onClick={handleInsertar} sx={{ bgcolor: '#1d3557' }}>
-            + INSERTAR DATOS
-          </Button>
+          <Tooltip title="Guardar producto en la base de datos" placement="top" arrow>
+            <Button variant="contained" onClick={handleInsertar} sx={{ bgcolor: '#1d3557' }}>
+              + INSERTAR DATOS
+            </Button>
+          </Tooltip>
         </Box>
       </Paper>
 
@@ -105,9 +107,11 @@ export default function Dashboard() {
                 <TableCell>
                   {/* Renderizado condicional: el usuario con rol user no va a poder eliminar registros */}
                   {userData.userRol === 'admin' && (
-                    <Button onClick={() => handleDeleteItem(row)} color="error">
-                      <DeleteForeverIcon />
-                    </Button>
+                    <Tooltip title="Borrar este registro para siempre" placement="right" arrow>
+                      <Button onClick={() => handleDeleteItem(row)} color="error">
+                        <DeleteForeverIcon />
+                      </Button>
+                    </Tooltip>
                   )}
                 </TableCell>
                 <TableCell>{row.nombre}</TableCell>
